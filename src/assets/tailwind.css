@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+.nav-text {
+    @apply text-nav-text font-bold cursor-pointer;
+}
+
+.nav-text:hover {
+    @apply text-black duration-500;
+}
+
+.footer-text {
+    @apply cursor-pointer;
+}
+
+.footer-text:hover {
+    @apply text-primary-cyan duration-500;
+}
+
+.button {
+    @apply bg-primary-cyan rounded-full text-white;
+}
+
+.button:hover {
+    @apply bg-bright-cyan duration-500;
+}
+
+svg {
+    @apply fill-current text-white cursor-pointer
+}
+
+svg:hover {
+    @apply text-primary-cyan duration-500
+}
