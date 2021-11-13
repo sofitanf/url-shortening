@@ -28,9 +28,7 @@
 			class="
 				overflow-hidden
 				flex flex-col
-				md:flex-row-reverse
-				md:justify-between
-				md:mt-8
+				md:flex-row-reverse md:justify-between md:mt-8
 				xl:mt-16
 			"
 		>
@@ -40,8 +38,7 @@
 					-mr-20
 					tablet:pl-10
 					lg:pl-0
-					md:ml-0
-					md:-mr-72
+					md:ml-0 md:-mr-72
 					lg:-mr-60
 					xl:-mr-32
 					xxl:-mr-20
@@ -60,14 +57,12 @@
 			<div
 				class="
 					mx-10
-					md:mx-0
-					md:ml-16
+					md:mx-0 md:ml-16
 					mt-16
 					tablet:mt-20
 					xl:ml-32
 					text-center
-					md:text-left
-					md:max-w-sm
+					md:text-left md:max-w-sm
 					lg:max-w-xl
 				"
 			>
@@ -123,8 +118,7 @@
 								rounded-md
 								text-gray-500
 								placeholder-gray-500
-								focus:outline-none
-								focus:border-transparent
+								focus:outline-none focus:border-transparent
 								height-webkit
 							"
 							:class="{
@@ -149,8 +143,8 @@
 							hover:bg-bright-cyan
 							duration-300
 						"
-						:class="{ 'bg-bright-cyan cursor-not-allowed': invalid }"
-						:disabled="invalid"
+						:class="{ 'bg-bright-cyan cursor-not-allowed': invalid || loading }"
+						:disabled="loading"
 						@click.prevent="shortenUrl"
 					>
 						Shorten It!
@@ -168,8 +162,7 @@
 				class="
 					divide-y divide-gray-200
 					mt-6
-					md:divide-none
-					md:flex
+					md:divide-none md:flex
 					justify-between
 					items-baseline
 					bg-white
@@ -215,10 +208,7 @@
 						relative
 						z-2
 						flex flex-col
-						lg:-mt-72
-						lg:items-start
-						lg:flex-row
-						lg:gap-8
+						lg:-mt-72 lg:items-start lg:flex-row lg:gap-8
 						overflow-hidden
 					"
 				>
@@ -362,9 +352,7 @@
 			class="
 				bg-very-dark-violet
 				flex flex-col
-				lg:justify-between
-				lg:items-start
-				lg:px-16
+				lg:justify-between lg:items-start lg:px-16
 				xl:px-32
 				lg:flex-row
 				gap-10
@@ -465,6 +453,7 @@ export default {
 			invalid: false,
 			urls: [],
 			copyUrl: "",
+			loading: false,
 		};
 	},
 	methods: {
@@ -475,11 +464,12 @@ export default {
 			await navigator.clipboard.writeText(url);
 
 			this.urls.map((item) => {
-				item.link === url ? (item.copied = true) : "";
-				item.link !== url ? (item.copied = false) : "";
+				item.link === url ? (item.copied = true) : (item.copied = false);
 			});
 		},
 		async shortenUrl() {
+			this.inputUrl();
+			this.loading = true;
 			await fetch("https://api-ssl.bitly.com/v4/shorten", {
 				method: "POST",
 				mode: "cors",
@@ -499,6 +489,7 @@ export default {
 				});
 
 			this.url = "";
+			this.loading = false;
 		},
 		addUrl(url) {
 			const urls = JSON.parse(sessionStorage.getItem("urls") || "[]");
