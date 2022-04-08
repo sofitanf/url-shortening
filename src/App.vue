@@ -460,17 +460,17 @@ export default {
 		toggle() {
 			this.showMenu = !this.showMenu;
 		},
-		async copiedUrl(url) {
-			await navigator.clipboard.writeText(url);
+		copiedUrl(url) {
+			navigator.clipboard.writeText(url);
 
 			this.urls.map((item) => {
 				item.link === url ? (item.copied = true) : (item.copied = false);
 			});
 		},
-		async shortenUrl() {
+		shortenUrl() {
 			this.inputUrl();
 			this.loading = true;
-			await fetch("https://api-ssl.bitly.com/v4/shorten", {
+			fetch("https://api-ssl.bitly.com/v4/shorten", {
 				method: "POST",
 				mode: "cors",
 				headers: {
