@@ -144,7 +144,7 @@
 							duration-300
 						"
 						:class="{ 'bg-bright-cyan cursor-not-allowed': invalid || loading }"
-						:disabled="loading"
+						:disabled="loading || invalid"
 						@click.prevent="shortenUrl"
 					>
 						Shorten It!
@@ -546,5 +546,8 @@ export default {
 .px-button-copied {
 	padding-left: 1.8rem;
 	padding-right: 1.8rem;
+}
+a {
+	cursor: pointer;
 }
 </style>
