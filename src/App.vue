@@ -490,7 +490,7 @@ export default {
 							link: data.link,
 							copied: false,
 						};
-						const urls = JSON.parse(sessionStorage.getItem("urls"));
+						const urls = JSON.parse(sessionStorage.getItem("urls") || "[]");
 						let findUrl = urls.filter((item) => item.long_url === url.long_url);
 
 						if (findUrl.length == 0) {
