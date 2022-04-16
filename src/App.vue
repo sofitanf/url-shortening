@@ -484,7 +484,7 @@ export default {
 			})
 				.then((response) => response.json())
 				.then((data) => {
-					let url = { long_url: this.url, link: data.link, copied: false };
+					let url = { long_url: data.long_url, link: data.link, copied: false };
 					this.addUrl(url);
 				});
 
