@@ -469,46 +469,39 @@ export default {
 		},
 		shortenUrl() {
 			this.inputUrl();
-			this.loading = true;
-			fetch("https://api-ssl.bitly.com/v4/shorten", {
-				method: "POST",
-				mode: "cors",
-				headers: {
-					Authorization: `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					long_url: this.url,
-					domain: "bit.ly",
-				}),
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					let url = { long_url: this.url, link: data.link, copied: false };
-					this.addUrl(url);
-				});
+			if (!this.invalid) {
+				this.loading = true;
+				fetch("https://api-ssl.bitly.com/v4/shorten", {
+					method: "POST",
+					mode: "cors",
+					headers: {
+						Authorization: `Bearer ${process.env.VUE_APP_ACCESS_TOKEN}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						long_url: this.url,
+						domain: "bit.ly",
+					}),
+				})
+					.then((response) => response.json())
+					.then((data) => {
+						let url = {
+							long_url: data.long_url,
+							link: data.link,
+							copied: false,
+						};
+						const urls = JSON.parse(sessionStorage.getItem("urls"));
+						let findUrl = urls.filter((item) => item.long_url === url.long_url);
 
-			this.url = "";
-			this.loading = false;
-		},
-		addUrl(url) {
-			const urls = JSON.parse(sessionStorage.getItem("urls") || "[]");
-			urls.push(url);
-
-			const result = urls.reduce((unique, o) => {
-				if (
-					!unique.some(
-						(obj) => obj.long_url === o.long_url && obj.link === o.link
-					)
-				) {
-					unique.push(o);
-				}
-				return unique;
-			}, []);
-
-			this.urls = result;
-
-			sessionStorage.setItem("urls", JSON.stringify(result));
+						if (findUrl.length == 0) {
+							urls.push(url);
+							sessionStorage.setItem("urls", JSON.stringify(urls));
+							this.urls = urls;
+						}
+						this.url = "";
+						this.loading = false;
+					});
+			}
 		},
 		inputUrl() {
 			const urlRegex =
